@@ -1,0 +1,30 @@
+# Info
+
+This program was written in Python and displays a graphical interface for analyzing the data produced by [Z-Hunt II](http://www.jbc.org/content/267/17/11846.full.pdf),
+an updated version of [Z-Hunt](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1167176/pdf/emboj00173-0317.pdf) that analyzes a given DNA sequence and looks up for regions with potential to form Z-DNA. 
+As mentioned by the authors:
+
+>" The computer program (Z-Hunt-II) developed for this study uses a rigorous thermodynamic search strategy to map the occurrenceof left-handed Z-DNA in genomic sequences. The search algorithm has been optimized to search large sequences for the potential occurrence of Z-DNA, taking into account sequence type, length, and cooperativity for a given stretch of potential Z-DNA-forming nucleotides."
+
+### Z-Score
+
+To do this the program computes for each base pair of the given DNA sequence, a value called Z-Score.
+
+> "In practical terms, the Z-Score relates the ability for a given sequence to adopt the Z conformation relative to a random sequence. We can also interpret the Z-Score as the number of random sequences that must be searched to find a nucleotide sequence that is as good or better at forming Z-DNA than the sequence in question."
+
+The original Z-Hunt II accepts 5 arguments to run:
+
+- `DNA`: as a sequence made up A, T, G and C.
+- `windowsize`: the length of the search window.
+- `minsize`
+- `maxsize`
+- `filename`: the name of the text file with the results.
+
+For this application, some of these arguments have been specified: `windowsize=8`, `minsize=6`, `maxsize=8` (they appear to replicate correctly the results published by the authors, there is little to no information about the exact meaning of these arguments).
+To program has been adapted to make a use of a web form. Fill it by giving a DNA sequence and a its name. The program makes use of a database in [firebase](http://firebase.google.com) to store the given information. After you hit hit submit, the backend would produce a table and a simple plot to visualize the results. 
+____
+**NOTE**: I haven't implemented any type of authentication in the application so the database currently has no security and might be unreliable. 
+Also I'm still unsure of how the application would behave when there is more than one user (more than one thread).
+
+
+

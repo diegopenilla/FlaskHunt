@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="/static/table.css">
+{% endblock %}
+
+{% block title %}Z-Hunt{% endblock %}
+{% block page_content %}
+<div class="page-header">
+    <h1>Z-Hunt Results</h1>
+</div>
+<div class="page-header">
+    <h2>{{ name }}</h2>
+    This the the DNA that was given: <br>
+    {{ sequence }}
+</div>
+
+<div class="table-wrapper-scroll-y my-custom-scrollbar">
+        <table class="table table-bordered table-striped mb-0">
+          <thead>
+            <tr>
+                <th scope="col">Position </th>
+                <th scope="col">DNA </th>
+                <th scope="col">Unclear1 </th>
+                <th scope="col">Unclear2 </th>
+                <th scope="col">Z-Score [kb] </th>
+                <th scope="col">Conformation </th>
+        
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in range(data.shape[0]) %}
+            <tr>
+              <th scope="row">{{ row+1 }}</th>
+              <td>{{ data.iloc[row]['DNA'][row] }}</td>
+              <td>{{ data.iloc[row]['Unclear1'] }}</td>
+              <td>{{ data.iloc[row]['Unclear2'] }}</td>
+              <td>{{ data.iloc[row]['Z-Score'] }}</td>
+              <td>{{ data.iloc[row]['Conformation'] }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      
+      </div>
+
+{% if plot_option == True %}
+    <iframe width="900" height="800" frameborder="0" scrolling="no" src="{{ url_image }}.embed"></iframe>
+{% else %}
+    <img src="{{ url_for('static', filename= 'images/{}.png'.format(name)) }}" alt="Gene101 Results" height="auto">
+{% endif %}
+
+{% endblock %}
+{% block body %}
+    {{ super() }}
+    {{ content }}
+{% endblock %}
