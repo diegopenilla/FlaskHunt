@@ -7,21 +7,28 @@ import matplotlib.pyplot as plt
 matplotlib.use('agg')
 
 def z_hunt(sequence, name):
+    print('cwd')
+    print(os.getcwd())
     # some preprocessing here
     DNA = sequence
     windowsize = 8
     minsize = 10
     maxsize = 20
 
-    nombre = 'results/{}'.format(name)
-    filename = nombre +'.txt'
+    cwd = os.getcwd()
+    nombre = '{}/results/{}'.format(cwd, name)
+    #nombre = 'results/{}'.format(name)
+    filename = '{}.txt'.format(nombre)
 
-    output = filename+'.Z-SCORE'
-    f= open(filename,"w+")
+    output = "{}.Z-SCORE".format(filename)
+    f = open(filename,"w+")
     f.write(DNA)
-    f.close() 
+    f.close()
     # Defino los argumentos de z-hunt:
-    os.system("./zhunt4.dms {} {} {} {}".format(windowsize, minsize, maxsize, filename))
+    zhunt_cmd = "{}/zhunt4.dms {} {} {} {}".format(cwd, windowsize, minsize, maxsize, filename)
+    print(zhunt_cmd)
+    zhunt_res = os.system(zhunt_cmd)
+    print(zhunt_res)
     #Execute zhunt with the arguments windowsize, minsize, maxsize and datafile...
 
 
@@ -35,7 +42,7 @@ def z_hunt(sequence, name):
     indexes = [i+1 for i in range(len(y))]
     data.round({'Unclear1':2, 'Unclear2':2, 'Z-Score':4})
 
-    # ADD INFO TO SESSIONS => WHEN DATABASE 
+    # ADD INFO TO SESSIONS => WHEN DATABASE
     def plot(name):
         plt.style.use('default')
         plt.figure(figsize = (8,8))
@@ -59,21 +66,20 @@ def z_hunt(sequence, name):
         plotly.tools.set_credentials_file(username='Chipichapes', api_key='L6ti8JP4PGxm4gkOqizP')
 
         datos = []
-        # data of graph   
-        datos.append(go.Scattergl(x= indexes, y=list(data['Z-Score']), mode='lines+markers', name = name))  
-        
-            
+        # data of graph
+        datos.append(go.Scattergl(x= indexes, y=list(data['Z-Score']), mode='lines+markers', name = name))
+
+
         layout = dict(title = 'Z-Scores for {}'.format(name),
                       xaxis = dict(title = 'Position in DNA'),
                       yaxis = dict(title = 'Z-Score [kb]'),
                       width=1000,
                     height=500
                       )
-        
+
         fig = dict(data=datos, layout=layout)
         # returns URL of graph
         return py.plot(fig, filename='test', auto_open=False)
 
     url_image = plotlyb(name)
     return data, url_image
-    
