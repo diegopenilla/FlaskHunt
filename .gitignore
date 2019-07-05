@@ -1,3 +1,11 @@
-__pycache__/
 .mypy_cache/
 results/
+*~
+*.pyc
+*.swp
+*#
+__pycache__
+.metadata
+.DS_Store
+*.log
+.vscode

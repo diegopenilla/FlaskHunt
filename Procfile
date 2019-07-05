@@ -1,0 +1,1 @@
+web: gunicorn ZDNA:app --log-file=-
