@@ -2,6 +2,6 @@
 FROM python:3.7-stretch
 COPY . /app
 WORKDIR /app
+RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
-ENTRYPOINT ["python"]
-CMD ["ZDNA.py"]
+CMD gunicorn ZDNA:app -bind 0.0.0.0:$PORT --reload

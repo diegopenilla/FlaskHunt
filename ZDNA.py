@@ -5,12 +5,13 @@ from flask import Flask, url_for, redirect, session
 from flask import render_template, request
 from flask import Markup
 from flask_wtf import FlaskForm
-from wtforms import TextAreaField, StringField, SubmitField, BooleanField, SelectField
+from wtforms import TextAreaField, StringField, SubmitField, BooleanField, SelectField  
 from wtforms.validators import Required
 from flask_bootstrap import Bootstrap
 import webbrowser
+import collections as collections
 
-# DATABASE
+# DATABASE CONFIGURATION
 import pyrebase
 config = {
     "apiKey": "AIzaSyCxOq7pbj3FdAhP6TNuh_wmoZyMWzqe8ec",
@@ -25,7 +26,7 @@ config = {
 firebase = pyrebase.initialize_app(config)
 db = firebase.database()
 
-# _ _ _ _ _
+# _ _ _ _ _ INIT __
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
 app.config['SECRET_KEY'] = 'epigen'
@@ -56,13 +57,14 @@ def info():
     content = Markup(markdown.markdown(content))
     return render_template('info.html', content=content)
 
+# Displays ZForm, Memory, Info
 @app.route('/')
 def index():
     # need to get the link right!
     direction = url_for('huntform')
     return render_template('index2.html', direction=direction)
 
-
+# WebForm to call Z-Hunt III
 class HuntForm(FlaskForm):
     '''Form '''
     name = StringField('Enter a name', validators=[Required()])
@@ -70,12 +72,28 @@ class HuntForm(FlaskForm):
     plot_option = BooleanField('Check for an Interactive Plot')
     submit = SubmitField('Submit')
 
+# Stores all searched sequences, includes delete option and loading into HuntForm
 @app.route('/memory', methods=['GET', 'POST'])
 def memory():
     # shows options of genes in the database
     form = MemoryForm(request.form)
-    genes = [(str(i), i) for i in db.child('sequences').get().val().keys()]
-    form.menu.choices = genes
+    try:    
+        genes = [(str(i), i) for i in db.child('sequences').get().val().keys()]
+        form.menu.choices = genes
+    except:
+        genes = [("", "")]
+        form.menu.choices = genes
+  
+    if form.remove.data == True and request.method == 'POST' and form.validate_on_submit():
+        name = form.menu.data
+        remove = form.remove.data
+        form.menu.data = ''
+        form.remove.data = False
+
+        # Sequence to be sent to HuntForm
+        db.child("sequences").child(str(name)).remove()
+        return render_template('table?del.html', form=form)
+
     if request.method == 'POST' and form.validate_on_submit():
         name = form.menu.data
         form.menu.data = ''
@@ -84,7 +102,7 @@ def memory():
         return redirect(url_for('huntform'))
     return render_template('table?.html', form=form)
 
-
+   
 @app.route('/huntform', methods=['GET', 'POST']) 
 def huntform():
 # """ Define Form with sequence: ATGC only and a name create a plot and a table with the results uploads the sequence and z-scores in firebase"""
@@ -98,7 +116,6 @@ def huntform():
 
     # IF HUNTFORM IS SENT: (PRINT THE RESULTS IN RESULTS.HTML)
     if request.method == 'POST' and form.validate_on_submit():
-            redirected = False
             sequence = form.sequence.data
             name = form.name.data
             plot_option = form.plot_option.data
@@ -119,7 +136,4 @@ class MemoryForm(FlaskForm):
     '''Form '''
     menu = SelectField("Select a gene")
     submit = SubmitField('Submit')
-
-
-if __name__ == '__main__':
-    app.run(debug=True, host= '0.0.0.0')
+    remove = BooleanField('Remove')
