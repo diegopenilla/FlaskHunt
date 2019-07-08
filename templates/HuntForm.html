@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Z-Hunt{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Z-Hunt</h1>
+</div>
+
+<p>The design of the plots is very simple, let me know how they should like.</p>
+<p>Some funcionalities of the previous program in Jupyter are still missing</p>
+<div class="page-header">
+    <h2>Arguments </h2>
+        {{ wtf.quick_form(form) }}
+</div>
+{% endblock %}
+
+{% block body %}
+    {{ super() }}
+    {{ content }}
+{% endblock %}

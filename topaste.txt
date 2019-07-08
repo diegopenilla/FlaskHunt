@@ -1,0 +1,11 @@
+@app.route('/huntform', methods=['GET', 'POST']) 
+def huntform():
+# """ Define Form with sequence: ATGC only and a name create a plot and a table with the results uploads the sequence and z-scores in firebase"""
+    # DNA TO BE GIVEN:
+    sequence = None
+    form = HuntForm(request.form)
+
+    if session['memory'] is not None:
+        form.name.data = session['memory'][0]
+        form.sequence.data = session['memory'][1]
+        session['memory']= None
