@@ -1,2 +1,2 @@
 #!/usr/bin/bash
-docker build -t zhunt:latest .
+docker build -t diegopenilla/zhunt:latest .

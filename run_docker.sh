@@ -1,2 +1,2 @@
 #!/usr/bin/bash
-docker run -d -p 5000:5000 zhunt
+docker run -it -p 5000:5000 diegopenilla/zhunt:latest
