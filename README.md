@@ -1,11 +1,15 @@
-# Z-DNApp
+# Hunting Z
 
-## Structure
-- ZDNA.py: main file
+Web application to run [Z-Hunt II](http://www.jbc.org/content/267/17/11846.full.pdf), a tool to predict Z-DNA conformation in genomic sequences. 
 
-### Templates
-- base.html => extends from bootstrap/base.html
-    - index.html
-        - memory.html
-        - form.html
-        - results.html
+To build the image run:
+```bash
+chmod +x build_docker.sh
+bash build_docker.sh
+```
+
+To run the app:
+```bash
+chmod +x run_docker.sh
+bash run_docker.sh
+```
