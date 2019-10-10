@@ -48,7 +48,7 @@
 {% if plot_option == True %}
     <iframe width="900" height="800" frameborder="0" scrolling="no" src="{{ url_image }}.embed"></iframe>
 {% else %}
-    <img src="{{ url_for('static', filename= 'images/{}.png'.format(name)) }}" alt="Gene101 Results" height="auto">
+    <img src="{{ url_for('static', filename= 'images/temp.png') }}" alt="Gene Results" height="auto">
 {% endif %}
 
 {% endblock %}

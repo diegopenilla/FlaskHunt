@@ -64,14 +64,6 @@ def index():
     direction = url_for('huntform')
     return render_template('index2.html', direction=direction)
 
-# WebForm to call Z-Hunt III
-class HuntForm(FlaskForm):
-    '''Form '''
-    name = StringField('Enter a name', validators=[Required()])
-    sequence = TextAreaField('Enter DNA sequence', validators=[Required()])
-    plot_option = BooleanField('Check for an Interactive Plot')
-    submit = SubmitField('Submit')
-
 # Stores all searched sequences, includes delete option and loading into HuntForm
 @app.route('/memory', methods=['GET', 'POST'])
 def memory():
@@ -131,10 +123,44 @@ def huntform():
                                   url_image=url_image, plot_option=plot_option) 
     return render_template('HuntForm.html', form=form, sequence=sequence)
 
-
+# Forms
+class HuntForm(FlaskForm):
+    '''Form '''
+    name = StringField('Enter a name', validators=[Required()])
+    sequence = TextAreaField('Enter DNA sequence', validators=[Required()])
+    plot_option = BooleanField('Check for an Interactive Plot')
+    submit = SubmitField('Submit')
 class MemoryForm(FlaskForm):
     '''Form '''
     menu = SelectField("Select a gene")
     submit = SubmitField('Submit')
     remove = BooleanField('Remove')
+
+@app.route('/newform', methods=['GET', 'POST'])
+def newform():
+    if request.method == 'POST': #this block is only entered when the form is submitted
+        NAME = request.form.get('name')
+        DNA = request.form.get('text')
+        return '''<h1> The DNA is "{}</h1>
+                  <h2> The Name is {}</h2>'''.format(DNA, NAME)
+
+    return render_template(
+        'cool_custom_form.html')
+
+
+
+@app.route('/newform2', methods=['GET', 'POST'])
+def newform2():
+    if request.method == 'POST': #this block is only entered when the form is submitted
+        name = request.form.get('name')
+        sequence = request.form.get('text')
+        data, url_image = z_hunt(sequence, name)
+        return render_template('results.html', name=name, sequence=sequence, data=data, 
+                                  url_image=url_image, plot_option=True) 
+
+
+    return render_template(
+        'cool_custom_form.html')
+
+
 
