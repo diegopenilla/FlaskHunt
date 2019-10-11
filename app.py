@@ -121,6 +121,7 @@ def huntform():
             db.child("sequences").child(name).set(upload)
             return render_template('results.html', name=name, sequence=sequence, data=data, 
                                   url_image=url_image, plot_option=plot_option) 
+    
     return render_template('HuntForm.html', form=form, sequence=sequence)
 
 # Forms
@@ -151,16 +152,26 @@ def newform():
 
 @app.route('/newform2', methods=['GET', 'POST'])
 def newform2():
+    
+    sequence = None
+    form = HuntForm(request.form)
+    if 'memory' in session and session['memory'] is not None:
+        name = session['memory'][0]
+        sequence = session['memory'][1]
+        session['memory']= None
+
     if request.method == 'POST': #this block is only entered when the form is submitted
         name = request.form.get('name')
         sequence = request.form.get('text')
         data, url_image = z_hunt(sequence, name)
+        # UPLOADING TO THE DATABASE
+        upload = {'sequence':sequence}
+        db.child("sequences").child(name).set(upload)
         return render_template('results.html', name=name, sequence=sequence, data=data, 
                                   url_image=url_image, plot_option=True) 
 
+    # ANADIR FORM
 
     return render_template(
         'cool_custom_form.html')
-
-
 
