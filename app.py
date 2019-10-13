@@ -119,7 +119,8 @@ def huntform():
             upload = {'sequence':sequence}
                       #'scores':list(data['Z-Score'])}
             db.child("sequences").child(name).set(upload)
-            return render_template('results.html', name=name, sequence=sequence, data=data, 
+            path = f'static/images/{name}.png'
+            return render_template('results.html', name=name, path=path, sequence=sequence, data=data, 
                                   url_image=url_image, plot_option=plot_option) 
     
     return render_template('HuntForm.html', form=form, sequence=sequence)

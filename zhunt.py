@@ -51,7 +51,7 @@ def z_hunt(sequence, name):
         plt.ylabel(r"Z-Score [kb]")
         p = plt.plot(indexes, y)
         plt.title('Score for {} DNA'.format(name))
-        plt.savefig("./static/images/{}.png".format(name))
+        plt.savefig("static/images/{}.png".format(name))
         plt.title('Z-Scores for {} DNA'.format(name))
         print('Plot saved in static/images')
         return None
@@ -81,6 +81,6 @@ def z_hunt(sequence, name):
         # returns URL of graph
         return py.plot(fig, filename='test', auto_open=False)
 
-    plot(name='temp')
+    plot(name=name)
     url_image = plotlyb(name)
     return data, url_image
